@@ -1,3 +1,5 @@
+ifneq ($(CONFIG_ODM_WT_EDIT),y)
+
 # SPDX-License-Identifier: GPL-2.0
 dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
@@ -322,6 +324,8 @@ dtb-$(CONFIG_ARCH_SDXPRAIRIE) += sdxprairie-rumi.dtb \
 	sa515m-ccard.dtb \
 	sa515m-ccard-pcie-ep.dtb \
 	sa515m-ccard-usb-ep.dtb
+
+endif # CONFIG_ODM_WT_EDIT
 
 ifeq ($(CONFIG_ARM64),y)
 always		:= $(dtb-y)

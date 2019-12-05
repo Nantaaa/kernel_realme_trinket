@@ -43,8 +43,8 @@
  #define EXPORT_SYMBOL(x)
 #endif
 
-#ifndef CONFIG_DEBUG_FS
-void gsi_debugfs_init(void)
+#ifndef CONFIG_GSI_DEBUG
+static inline void gsi_debugfs_init(void)
 {
 }
 #endif

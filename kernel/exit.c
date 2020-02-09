@@ -513,6 +513,12 @@ static void exit_mm(void)
 		exit_oom_victim();
 	if (mm_released)
 		set_tsk_thread_flag(current, TIF_MM_RELEASED);
+#ifdef CONFIG_ANDROID_SIMPLE_LMK
+	clear_thread_flag(TIF_MEMDIE);
+#else
+	if (test_thread_flag(TIF_MEMDIE))
+		exit_oom_victim();
+#endif
 }
 
 static struct task_struct *find_alive_thread(struct task_struct *p)

@@ -824,10 +824,8 @@ static ssize_t devkmsg_write(struct kiocb *iocb, struct iov_iter *from)
 #endif /* CONFIG_ODM_WT_EDIT */
 
 	buf[len] = '\0';
-	if (!copy_from_iter_full(buf, len, from)) {
-		kfree(buf);
+	if (!copy_from_iter_full(buf, len, from))
 		return -EFAULT;
-	}
 
 	/*
 	 * Extract and skip the syslog prefix <[0-9]*>. Coming from userspace

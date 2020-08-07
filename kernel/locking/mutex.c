@@ -526,24 +526,31 @@ bool mutex_spin_on_owner(struct mutex *lock, struct task_struct *owner,
 {
 	bool ret = true;
 
-	//lockdep_assert_preemption_disabled();
+	for (;;) {
+		unsigned int cpu;
+		bool same_owner;
 
-	while (__mutex_owner(lock) == owner) {
 		/*
-		 * Ensure we emit the owner->on_cpu, dereference _after_
-		 * checking lock->owner still matches owner. And we already
-		 * disabled preemption which is equal to the RCU read-side
-		 * crital section in optimistic spinning code. Thus the
-		 * task_strcut structure won't go away during the spinning
-		 * period
+		 * Ensure lock->owner still matches owner. If that fails,
+		 * owner might point to freed memory. If it still matches,
+		 * the rcu_read_lock() ensures the memory stays valid.
 		 */
-		barrier();
+		rcu_read_lock();
+		same_owner = __mutex_owner(lock) == owner;
+		if (same_owner) {
+			ret = owner->on_cpu;
+			if (ret)
+				cpu = task_cpu(owner);
+		}
+		rcu_read_unlock();
+
+		if (!ret || !same_owner)
+			break;
 
 		/*
 		 * Use vcpu_is_preempted to detect lock holder preemption issue.
 		 */
-		if (!owner->on_cpu || need_resched() ||
-				vcpu_is_preempted(task_cpu(owner))) {
+		if (need_resched() || vcpu_is_preempted(cpu)) {
 			ret = false;
 			break;
 		}

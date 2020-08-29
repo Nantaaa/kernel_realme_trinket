@@ -79,6 +79,9 @@ struct lpm_history {
 
 static DEFINE_PER_CPU(struct lpm_history, hist);
 
+static uint32_t bias_hyst;
+module_param_named(bias_hyst, bias_hyst, uint, 0664);
+
 static DEFINE_PER_CPU(struct lpm_cpu*, cpu_lpm);
 static bool suspend_in_progress;
 static struct hrtimer lpm_hrtimer;

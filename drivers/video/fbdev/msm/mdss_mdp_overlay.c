@@ -4220,6 +4220,13 @@ static ssize_t mdss_mdp_dyn_pu_store(struct device *dev,
 
 	return count;
 }
+
+	/*
+	 * The event timer was killed due to messing with pm qos, and no one
+	 * uses autorefresh anyway.
+	 */
+	return -EINVAL;
+
 static ssize_t mdss_mdp_cmd_autorefresh_show(struct device *dev,
 	struct device_attribute *attr, char *buf)
 {
@@ -6775,6 +6782,8 @@ int mdss_mdp_overlay_init(struct msm_fb_data_type *mfd)
 
 	mdss_irq = mdss_intr_line();
 
+	/* This is for an unused feature (autorefresh) and breaks pm qos */
+#if 0
 	/* Adding event timer only for primary panel */
 	if ((mfd->index == 0) && (mfd->panel_info->type != WRITEBACK_PANEL)) {
 		mdp5_data->cpu_pm_hdl = add_event_timer(mdss_irq->irq,
@@ -6782,6 +6791,7 @@ int mdss_mdp_overlay_init(struct msm_fb_data_type *mfd)
 		if (!mdp5_data->cpu_pm_hdl)
 			pr_warn("%s: unable to add event timer\n", __func__);
 	}
+#endif
 
 	if (mfd->panel_info->cont_splash_enabled) {
 		rc = mdss_mdp_overlay_handoff(mfd);

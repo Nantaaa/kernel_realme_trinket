@@ -1787,6 +1787,7 @@ sme_apf_read_work_memory(tHalHandle hal,
 #endif /* FEATURE_WLAN_APF */
 
 uint32_t sme_get_wni_dot11_mode(tHalHandle hal);
+>>>>>>> ced14f79dd8e ([SQUASH] qcacld-3.0: fix some warnings)
 
 /**
  * sme_create_mon_session() - post message to create PE session for monitormode
@@ -1798,7 +1799,7 @@ uint32_t sme_get_wni_dot11_mode(tHalHandle hal);
  * Return: QDF_STATUS_SUCCESS on success, non-zero error code on failure.
  */
 QDF_STATUS sme_create_mon_session(tHalHandle hal_handle,
-				  uint8_t *bssid, uint8_t vdev_id);
+				  uint8_t bssid[QDF_MAC_ADDR_SIZE], uint8_t vdev_id);
 /**
  * sme_delete_mon_session() - post message to delete PE session for mon_mode
  * operation

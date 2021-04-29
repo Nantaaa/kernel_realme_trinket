@@ -1,5 +1,4 @@
-/*
- * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -12,14 +11,24 @@
  */
 
 /dts-v1/;
+/plugin/;
 
-#include "trinket.dtsi"
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/clock/qcom,gcc-trinket.h>
 #include "trinket-idp.dtsi"
+#include "trinket-audio-overlay.dtsi"
 
 / {
 	model = "Qualcomm Technologies, Inc. TRINKET IDP";
 	compatible = "qcom,trinket-idp", "qcom,trinket", "qcom,idp";
+	qcom,msm-id = <394 0x10000>;
 	qcom,board-id = <34 0>;
-	/*oppo,prjversion. first one is the count of projects*/
-	oppo,prjversion = <1 19631>;
+	oppo,dtsi_no = <19743>;
 };
+
+//#ifdef CONFIG_PRODUCT_REALME_TRINKET
+//guoqiang.jiang@oppo.com,2019.03.27,add himax 18112a panel
+//&dsi_td4330_truly_cmd_display {
+//	qcom,dsi-display-active;
+//};
+//#endif /* CONFIG_PRODUCT_REALME_TRINKET */

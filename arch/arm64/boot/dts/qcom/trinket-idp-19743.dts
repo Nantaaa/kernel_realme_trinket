@@ -21,5 +21,5 @@
 	compatible = "qcom,trinket-idp", "qcom,trinket", "qcom,idp";
 	qcom,board-id = <34 0>;
 	/*oppo,prjversion. first one is the count of projects*/
-	oppo,prjversion = <1 19631>;
+	oppo,dtsi_no = <19743>;
 };

@@ -1,0 +1,44 @@
+#include "../trinket-idp.dtsi"
+#include "RMX1911-trinket-audio.dtsi"
+#include "RMX1911-trinket-battery.dtsi"
+#include "RMX1911-trinket-camera.dtsi"
+#include "RMX1911-trinket-display.dtsi"
+#include "RMX1911-trinket-fingerprint.dtsi"
+#include "RMX1911-trinket-memory.dtsi"
+#include "RMX1911-trinket-pinctrl.dtsi"
+#include "RMX1911-trinket-pm6125.dtsi"
+#include "RMX1911-trinket-pmi632.dtsi"
+#include "RMX1911-trinket-regulator.dtsi"
+#include "RMX1911-trinket-touchscreen.dtsi"
+#include "RMX1911-trinket-thermal.dtsi"
+#include "RMX1911-trinket-usb.dtsi"
+
+&firmware {
+	android {
+		vbmeta {
+			parts = "vbmeta,boot,system,vendor,dtbo,recovery,odm";
+		};
+
+		fstab {
+			vendor {
+				dev = "/dev/block/platform/soc/4744000.sdhci/by-name/vendor";
+				mnt_flags = "ro,barrier=1,async_discard";
+				fsmgr_flags = "wait";
+			};
+		};
+	};
+};
+
+&sdhc_2 {
+	cd-gpios = <&tlmm 98 GPIO_ACTIVE_HIGH>;
+};
+
+&soc {
+	devinfo {
+		compatible = "oppo-devinfo";
+		io-channel-names = "sub_adc_gpio3";
+		io-channels = <&pmi632_vadc ADC_GPIO2_PU2>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&sub_mainboard_default>;
+	};
+};

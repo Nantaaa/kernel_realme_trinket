@@ -1,0 +1,6 @@
+#include <dt-bindings/msm/msm-bus-ids.h>
+
+&qupv3_se2_spi {
+	pinctrl-0 = <&qupv3_se2_spi_active &qupv3_se2_spi_cs0_active &qupv3_se2_spi_miso_active>;
+	pinctrl-1 = <&qupv3_se2_spi_sleep &qupv3_se2_spi_cs0_sleep &qupv3_se2_spi_miso_sleep>;
+};

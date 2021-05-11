@@ -289,8 +289,6 @@ void diag_register_with_bridge(void)
 
 void diag_unregister_bridge(void)
 {
-	if (IS_ENABLED(CONFIG_USB_QCOM_DIAG_BRIDGE))
-		diag_unregister_hsic();
-	else if (IS_ENABLED(CONFIG_MHI_BUS))
+	if (IS_ENABLED(CONFIG_MHI_BUS))
 		diag_unregister_mhi();
 }

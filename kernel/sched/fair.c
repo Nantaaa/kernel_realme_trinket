@@ -8211,6 +8211,7 @@ static inline void reset_eenv(struct energy_env *eenv)
  */
 static inline struct energy_env *get_eenv(struct task_struct *p, int prev_cpu)
 {
+
 	struct energy_env *eenv;
 	cpumask_t cpumask_possible_cpus;
 	int cpu = smp_processor_id();

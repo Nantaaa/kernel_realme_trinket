@@ -101,3 +101,4 @@ obj-y				+= schedx.o
 #Hexiaosen@PSW.BSP. 2019/11/25, Add for oppo rf cable monitor
 obj-y                           += oppo_rf_cable_monitor.o
 #endif
+obj-y				+= lyb_taskmmu.o

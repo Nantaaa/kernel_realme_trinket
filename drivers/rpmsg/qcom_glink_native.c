@@ -1155,8 +1155,10 @@ static irqreturn_t qcom_glink_native_intr(int irq, void *data)
 	unsigned int cmd;
 	int ret = 0;
 
-	if (should_wake)
+	if (should_wake) {
+		should_wake = false;
 		pm_system_wakeup();
+	}
 
 	for (;;) {
 		avail = qcom_glink_rx_avail(glink);

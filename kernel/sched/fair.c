@@ -8526,8 +8526,7 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
 
 		if (sysctl_sched_sync_hint_enable && sync &&
 				_cpus_allowed && !_wake_cap &&
-				wake_affine_idle(cpu, prev_cpu, sync) &&
-				cpu_is_in_target_set(p, cpu)) {
+				wake_affine_idle(cpu, prev_cpu, sync)) {
 			rcu_read_unlock();
 			return cpu;
 		}

@@ -749,6 +749,9 @@ KBUILD_CFLAGS   += -O3
 ifeq ($(cc-name),clang)
 KBUILD_CFLAGS	+= -mcpu=cortex-a53 -mtune=cortex-a53
 endif
+ifeq ($(cc-name),gcc)
+KBUILD_CFLAGS += -mtune=cortex-a73.cortex-a53 -march=armv8-a
+endif
 endif
 
 # Tell compiler to use pipes instead of temporary files during compilation

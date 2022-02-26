@@ -859,3 +859,11 @@ config HAVE_LOW_MEMORY_KILLER
 	  Say 'y' if you have a user/kernel low memory killer and thus you
 	  want page allocator to provide sufficient time before it triggers
 	  Out of Memory killer.
+
+config LRU_GEN
+	bool "Multi-Gen LRU"
+	depends on MMU
+	# the following options can use up the spare bits in page flags
+	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
+	help
+	  A high performance LRU implementation to overcommit memory.

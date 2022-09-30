@@ -1713,7 +1713,7 @@ static struct ctl_table vm_table[] = {
 		.procname	= "swappiness",
 		.data		= &vm_swappiness,
 		.maxlen		= sizeof(vm_swappiness),
-		.mode		= 0644,
+		.mode		= 0444,
 		.proc_handler	= proc_dointvec_minmax,
 		.extra1		= &zero,
 #ifdef CONFIG_PRODUCT_REALME_TRINKET //yixue.ge@PSW.BSP.Kernel.Driver 20170720 add for add direct_vm_swappiness

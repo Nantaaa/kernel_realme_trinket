@@ -405,4 +405,8 @@ void dsi_panel_ext_bridge_put(struct dsi_panel *panel);
 int dsi_panel_tx_cmd_set(struct dsi_panel *panel,
 			   enum dsi_cmd_set_type type);
 #endif
+
+void dsi_panel_calc_dsi_transfer_time(struct dsi_host_common_cfg *config,
+		struct dsi_display_mode *mode, u32 frame_threshold_us);
+
 #endif /* _DSI_PANEL_H_ */

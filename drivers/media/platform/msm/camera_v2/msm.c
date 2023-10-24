@@ -236,6 +236,9 @@ static inline void msm_pm_qos_add_request(void)
 static void msm_pm_qos_remove_request(void)
 {
 	pr_info("%s: remove request", __func__);
+	#ifdef CONFIG_PRODUCT_REALME_TRINKET
+	atomic_set(&qos_add_request_done,0);
+	#endif
 	pm_qos_remove_request(&msm_v4l2_pm_qos_request);
 }
 

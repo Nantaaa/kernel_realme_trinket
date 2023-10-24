@@ -125,6 +125,16 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
 }
 EXPORT_SYMBOL(nmi_panic);
 
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+/* yawnu@TECH.Storage.FS.oF2FS, 2019/09/13, flush device cache in panic if necessary */
+extern int panic_flush_device_cache(int timeout);
+#endif
+
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+/*yanghao@BSP.Kernel.Stability, 2019-9-5*/
+extern int get_download_mode(void);
+#endif  /*CONFIG_PRODUCT_REALME_TRINKET*/
+
 /**
  *	panic - halt the system
  *	@fmt: The text string to print
@@ -180,6 +190,12 @@ void panic(const char *fmt, ...)
 	vsnprintf(buf, sizeof(buf), fmt, args);
 	va_end(args);
 	dump_stack_minidump(0);
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+/*yanwu@TECH.Storage.FS, 2019-08-27, flush device cache before goto dump mode*/
+/*yanghao@BSP.Kernel.Stability, 2019-9-5*/
+	if(!get_download_mode())
+		panic_flush_device_cache(2000);
+#endif
 	pr_emerg("Kernel panic - not syncing: %s\n", buf);
 #ifdef CONFIG_DEBUG_BUGVERBOSE
 	/*

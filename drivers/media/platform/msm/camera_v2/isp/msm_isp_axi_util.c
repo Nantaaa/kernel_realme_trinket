@@ -627,10 +627,18 @@ static void msm_isp_update_framedrop_reg(struct msm_vfe_axi_stream *stream_info,
 			stream_info->current_framedrop_period =
 				MSM_VFE_STREAM_STOP_PERIOD;
 	}
-
-	if (stream_info->undelivered_request_cnt > 0)
-		stream_info->current_framedrop_period =
-			MSM_VFE_STREAM_STOP_PERIOD;
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+		if (stream_info->undelivered_request_cnt > 0)
+			stream_info->current_framedrop_period =
+				MSM_VFE_STREAM_STOP_PERIOD;
+#else
+		if (stream_info->undelivered_request_cnt > 0 &&
+			drop_reconfig != 1)
+			stream_info->current_framedrop_period =
+				MSM_VFE_STREAM_STOP_PERIOD;
+		if (stream_info->controllable_output && drop_reconfig == 1)
+			stream_info->current_framedrop_period = 1;
+#endif
 	/*
 	 * re-configure the period pattern, only if it's not already
 	 * set to what we want

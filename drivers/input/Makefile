@@ -31,3 +31,6 @@ obj-$(CONFIG_INPUT_KEYRESET)	+= keyreset.o
 obj-$(CONFIG_INPUT_KEYCOMBO)	+= keycombo.o
 
 obj-$(CONFIG_RMI4_CORE)		+= rmi4/
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+obj-$(CONFIG_OPPO_FINGERPRINT)  += oppo_fp_drivers/
+#endif

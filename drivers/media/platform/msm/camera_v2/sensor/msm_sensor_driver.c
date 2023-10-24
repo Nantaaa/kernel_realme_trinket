@@ -19,6 +19,9 @@
 #include "msm_camera_dt_util.h"
 #include "msm_sensor_driver.h"
 
+/*maxinming_hq added for camera devinfo 20191212*/
+#include <soc/oppo/device_info.h>
+
 /* Logging macro */
 #undef CDBG
 #define CDBG(fmt, args...) pr_debug(fmt, ##args)
@@ -761,6 +764,12 @@ int32_t msm_sensor_driver_probe(void *setting,
 	struct msm_camera_i2c_reg_array     *reg_setting = NULL;
 	struct msm_sensor_id_info_t         *id_info = NULL;
 
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+	//char sensor_hardware_info[128] = {0};
+	int32_t				i = 0;
+	struct camera_vreg_t *cam_vreg = NULL;
+#endif /*CONFIG_PRODUCT_REALME_TRINKET*/
+
 	/* Validate input parameters */
 	if (!setting) {
 		pr_err("failed: slave_info %pK", setting);
@@ -1064,6 +1073,76 @@ int32_t msm_sensor_driver_probe(void *setting,
 	cci_client->id_map = 0;
 	cci_client->i2c_freq_mode = slave_info->i2c_freq_mode;
 
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+	cam_vreg = s_ctrl->sensordata->power_info.cam_vreg;
+	if (!(strcmp(slave_info->sensor_name, "s5kgm1_xinli") ) && cam_vreg != NULL) {
+		for (i =0; i< s_ctrl->sensordata->power_info.num_vreg; i++) {
+			CDBG("%s reg_name:%s, max_vol:%d, min_vol:%d",
+				slave_info->sensor_name, cam_vreg[i].reg_name, cam_vreg[i].max_voltage,
+				cam_vreg[i].min_voltage);
+			if (!(strcmp(cam_vreg[i].reg_name, "cam_vana"))) {
+				cam_vreg[i].max_voltage = cam_vreg[i].min_voltage = 2800000;
+				pr_info("%s set cam_vana: max_vol:%d, min_vol:%d",
+					slave_info->sensor_name, cam_vreg[i].max_voltage,
+					cam_vreg[i].min_voltage);
+			}
+		}
+	} else if (!(strcmp(slave_info->sensor_name, "imx386_qtech") ) && cam_vreg != NULL) {
+		for (i =0; i< s_ctrl->sensordata->power_info.num_vreg; i++) {
+			CDBG("%s reg_name:%s, max_vol:%d, min_vol:%d",
+				slave_info->sensor_name, cam_vreg[i].reg_name, cam_vreg[i].max_voltage,
+				cam_vreg[i].min_voltage);
+			if (!(strcmp(cam_vreg[i].reg_name, "cam_vana"))) {
+				cam_vreg[i].max_voltage = cam_vreg[i].min_voltage = 2700000;
+				pr_info("%s set cam_vana: max_vol:%d, min_vol:%d",
+					slave_info->sensor_name, cam_vreg[i].max_voltage,
+					cam_vreg[i].min_voltage);
+			}
+		}
+	} else if (!(strcmp(slave_info->sensor_name, "s5k4h7") ) && cam_vreg != NULL) {
+		for (i =0; i< s_ctrl->sensordata->power_info.num_vreg; i++) {
+			CDBG("%s reg_name:%s, max_vol:%d, min_vol:%d",
+				slave_info->sensor_name, cam_vreg[i].reg_name, cam_vreg[i].max_voltage,
+				cam_vreg[i].min_voltage);
+			if (!(strcmp(cam_vreg[i].reg_name, "cam_vdig"))) {
+				cam_vreg[i].max_voltage = cam_vreg[i].min_voltage = 1200000;
+				pr_info("%s set cam_vdig: max_vol:%d, min_vol:%d",
+					slave_info->sensor_name, cam_vreg[i].max_voltage,
+					cam_vreg[i].min_voltage);
+			}
+		}
+	} else if (!(strcmp(slave_info->sensor_name, "s5k3l6_ofilm") ) && cam_vreg != NULL) {
+		for (i =0; i< s_ctrl->sensordata->power_info.num_vreg; i++) {
+			CDBG("%s reg_name:%s, max_vol:%d, min_vol:%d",
+				slave_info->sensor_name, cam_vreg[i].reg_name, cam_vreg[i].max_voltage,
+				cam_vreg[i].min_voltage);
+			if (!(strcmp(cam_vreg[i].reg_name, "cam_vdig"))) {
+				cam_vreg[i].max_voltage = cam_vreg[i].min_voltage = 1050000;
+				pr_info("%s set cam_vdig: max_vol:%d, min_vol:%d",
+					slave_info->sensor_name, cam_vreg[i].max_voltage,
+					cam_vreg[i].min_voltage);
+			}
+		}
+	} else if (!(strcmp(slave_info->sensor_name, "ov12a10") ) && cam_vreg != NULL) {
+		for (i =0; i< s_ctrl->sensordata->power_info.num_vreg; i++) {
+			CDBG("%s reg_name:%s, max_vol:%d, min_vol:%d",
+				slave_info->sensor_name, cam_vreg[i].reg_name, cam_vreg[i].max_voltage,
+				cam_vreg[i].min_voltage);
+			if (!(strcmp(cam_vreg[i].reg_name, "cam_vana"))) {
+				cam_vreg[i].max_voltage = cam_vreg[i].min_voltage = 2800000;
+				pr_info("%s set cam_vana: max_vol:%d, min_vol:%d",
+					slave_info->sensor_name, cam_vreg[i].max_voltage,
+					cam_vreg[i].min_voltage);
+			} else if (!(strcmp(cam_vreg[i].reg_name, "cam_vdig"))) {
+				cam_vreg[i].max_voltage = cam_vreg[i].min_voltage = 1200000;
+				pr_info("%s set cam_vdig: max_vol:%d, min_vol:%d",
+					slave_info->sensor_name, cam_vreg[i].max_voltage,
+					cam_vreg[i].min_voltage);
+			}
+		}
+	}
+#endif /* CONFIG_PRODUCT_REALME_TRINKET */
+
 	/* Parse and fill vreg params for powerup settings */
 	rc = msm_camera_fill_vreg_params(
 		s_ctrl->sensordata->power_info.cam_vreg,
@@ -1142,6 +1221,29 @@ CSID_TG:
 
 	s_ctrl->bypass_video_node_creation =
 		slave_info->bypass_video_node_creation;
+
+	/*maxinming_hq added for camera devinfo 20191212*/
+	if (slave_info->sensor_init_params.position == BACK_CAMERA_B) {
+		rc = register_device_proc_cam("camera_main", slave_info->sensor_name);
+		pr_err("%s register camera devinfo success, position:%d \n",slave_info->sensor_name,slave_info->sensor_init_params.position);
+		if (rc) {
+			pr_err("register camera_main devinfo fail\n");
+		}
+	}else if (slave_info->sensor_init_params.position == FRONT_CAMERA_B) {
+		rc = register_device_proc_cam("camera_sub", slave_info->sensor_name);
+		pr_err("%s register camera devinfo success, position:%d \n",slave_info->sensor_name,slave_info->sensor_init_params.position);
+		if (rc) {
+			pr_err("register camera_sub devinfo fail\n");
+		}
+	}else if (slave_info->sensor_init_params.position == AUX_CAMERA_B) {
+		rc = register_device_proc_cam("camera_aux", slave_info->sensor_name);
+		pr_err("%s register camera devinfo success, position:%d \n",slave_info->sensor_name,slave_info->sensor_init_params.position);
+		if (rc) {
+			pr_err("register camera_aux devinfo fail\n");
+		}
+	}else{
+		pr_err("%s register camera devinfo failed, position:%d \n",slave_info->sensor_name,slave_info->sensor_init_params.position);
+	}
 
 	/*
 	 * Create /dev/videoX node, comment for now until dummy /dev/videoX

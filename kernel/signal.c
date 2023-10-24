@@ -1049,6 +1049,58 @@ static inline void userns_fixup_signal_uid(struct siginfo *info, struct task_str
 }
 #endif
 
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+/*fanhui@PhoneSW.BSP, 2016-06-21, DeathHealer, record the SIGSTOP sender*/
+extern char last_stopper_comm[];
+#endif
+
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+//Haoran.Zhang@PSW.AD.Kernel.1052210, 2015/11/04, Modify for the sender who kill system_server
+//Jianping.Zheng@PSW.AD.Kernel.1052210, 2018/04/31, Modify for print log when the key process thread killed
+static bool is_zygote_process(struct task_struct *t)
+{
+	const struct cred *tcred = __task_cred(t);
+
+	struct task_struct * first_child = NULL;
+	if(t->children.next && t->children.next != (struct list_head*)&t->children.next)
+		first_child = container_of(t->children.next, struct task_struct, sibling);
+	if(!strcmp(t->comm, "main") && (tcred->uid.val == 0) && (t->parent != 0 && !strcmp(t->parent->comm,"init"))  )
+		return true;
+	else
+		return false;
+	return false;
+}
+
+static bool is_systemserver_process(struct task_struct *t) {
+    if (!strcmp(t->comm, "system_server")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static bool is_key_process(struct task_struct *t) {
+    struct pid *pgrp;
+    struct task_struct *taskp;
+
+    if (t->pid == t->tgid) {
+        if (is_systemserver_process(t) || is_zygote_process(t)) {
+            return true;
+        }
+    } else {
+        pgrp = task_pgrp(t);
+        if (pgrp != NULL) {
+            taskp = pid_task(pgrp, PIDTYPE_PID);
+            if (taskp != NULL && (is_systemserver_process(taskp) || is_zygote_process(taskp))) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+#endif
+
 static int __send_signal(int sig, struct siginfo *info, struct task_struct *t,
 			int group, int from_ancestor_ns)
 {
@@ -1060,6 +1112,16 @@ static int __send_signal(int sig, struct siginfo *info, struct task_struct *t,
 	assert_spin_locked(&t->sighand->siglock);
 
 	result = TRACE_SIGNAL_IGNORED;
+
+#ifdef CONFIG_PRODUCT_REALME_TRINKET
+//Haoran.Zhang@PSW.AD.Kernel.1052210, 2015/11/04, Modify for the sender who kill system_server
+        if(1) {
+                /*add the SIGKILL print log for some debug*/
+                if((sig == SIGHUP || sig == 33 || sig == SIGKILL || sig == SIGSTOP || sig == SIGABRT || sig == SIGTERM || sig == SIGCONT) && is_key_process(t)) {
+                        printk("Some other process %d:%s want to send sig:%d to pid:%d tgid:%d comm:%s\n", current->pid, current->comm, sig, t->pid, t->tgid, t->comm);
+                }
+        }
+#endif
 	if (!prepare_signal(sig, t,
 			from_ancestor_ns || (info == SEND_SIG_PRIV) || (info == SEND_SIG_FORCED)))
 		goto ret;

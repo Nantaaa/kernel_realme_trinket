@@ -676,7 +676,7 @@ CONFIG_RANDOMIZE_BASE=y
 #
 # Boot options
 #
-CONFIG_CMDLINE="cgroup_disable=pressure"
+CONFIG_CMDLINE="cgroup_disable=pressure,memory"
 CONFIG_CMDLINE_EXTEND=y
 CONFIG_EFI_STUB=y
 CONFIG_EFI=y

@@ -501,12 +501,6 @@
                        //#endif /* CONFIG_PRODUCT_REALME_TRINKET */
 		};
 
-		pil_camera_mem: camera_region@6ab00000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x6ab00000 0 0x500000>;
-		};
-
 		pil_modem_mem: modem_region@6b000000 {
 			compatible = "removed-dma-pool";
 			no-map;

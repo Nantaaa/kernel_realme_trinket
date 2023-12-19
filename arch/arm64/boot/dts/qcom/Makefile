@@ -8,7 +8,7 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 	trinket-idp-overlay-19632.dtbo-base := trinket-19632.dtb
 	dtbo-$(CONFIG_ARCH_TRINKET) += trinket-idp-overlay-19631.dtbo
 	trinket-idp-overlay-19631.dtbo-base := trinket-19631.dtb
-	
+
 else
 	dtb-$(CONFIG_ARCH_TRINKET)	+= trinket-idp.dtb
 	dtb-$(CONFIG_ARCH_TRINKET)	+= trinket-idp-19632.dtb

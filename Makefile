@@ -696,7 +696,7 @@ LDFLAGS		+= --plugin-opt=O3
 endif
 
 ifdef CONFIG_LTO_GCC
-LTO_CFLAGS	:= -flto=auto -fipa-pta -flto-compression-level=3
+LTO_CFLAGS	:= -flto=auto -fipa-pta
 KBUILD_CFLAGS	+= $(LTO_CFLAGS) --param=max-inline-insns-auto=1000
 LTO_LDFLAGS	:= $(LTO_CFLAGS) -Wno-lto-type-mismatch -Wno-psabi \
 		   -Wno-stringop-overflow -Wno-stringop-overread -flinker-output=nolto-rel \

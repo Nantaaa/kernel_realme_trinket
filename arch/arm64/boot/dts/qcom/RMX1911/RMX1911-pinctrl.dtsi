@@ -10,6 +10,40 @@
  * GNU General Public License for more details.
  */
 
+&qupv3_se2_spi {
+	pinctrl-0 = <&qupv3_se2_spi_active &qupv3_se2_spi_cs0_active &qupv3_se2_spi_miso_active>;
+	pinctrl-1 = <&qupv3_se2_spi_sleep &qupv3_se2_spi_cs0_sleep &qupv3_se2_spi_miso_sleep>;
+};
+
+&qupv3_se2_spi_active {
+	mux {
+		pins = "gpio7", "gpio8";
+	};
+
+	config {
+		pins = "gpio7", "gpio8";
+		output-low;
+	};
+};
+
+&qupv3_se4_2uart_sleep {
+	input-enable;
+};
+
+&qupv3_se2_spi_sleep {
+	mux {
+		pins = "gpio7", "gpio8";
+		function = "gpio";
+	};
+
+	configs {
+		pins = "gpio7", "gpio8";
+		drive-strength = <6>;
+		output-low;
+		bias-disable;
+	};
+};
+
 &tlmm {
 	gpio_id1_default: gpio_id1_default {
 		mux {
@@ -288,6 +322,13 @@
 				bias-pull-down;
 			};
 		};
+	};
+};
+
+&ts_int_active {
+	config {
+		/delete-property/ bias-pull-down;
+		bias-pull-up;
 	};
 };
 

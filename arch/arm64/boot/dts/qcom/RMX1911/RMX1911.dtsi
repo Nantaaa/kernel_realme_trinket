@@ -1,0 +1,53 @@
+/*
+ * Copyright (c) 2018-2019, The Linux Foundation.All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "../trinket-idp.dtsi"
+#include "RMX1911-audio.dtsi"
+#include "RMX1911-battery.dtsi"
+#include "RMX1911-camera.dtsi"
+#include "RMX1911-display.dtsi"
+#include "RMX1911-fingerprint.dtsi"
+#include "RMX1911-memory.dtsi"
+#include "RMX1911-pinctrl.dtsi"
+#include "RMX1911-pm6125.dtsi"
+#include "RMX1911-pmi632.dtsi"
+#include "RMX1911-regulator.dtsi"
+#include "RMX1911-thermal.dtsi"
+#include "RMX1911-touchscreen.dtsi"
+#include "RMX1911-usb.dtsi"
+
+&firmware {
+	android {
+		vbmeta {
+			parts = "vbmeta,boot,system,vendor,dtbo,recovery,odm";
+		};
+
+		fstab {
+			vendor {
+				dev = "/dev/block/platform/soc/4744000.sdhci/by-name/vendor";
+				fsmgr_flags = "wait";
+				mnt_flags = "ro,barrier=1,async_discard";
+			};
+		};
+	};
+};
+
+&soc {
+	devinfo {
+		compatible = "oppo-devinfo";
+		io-channel-names = "sub_adc_gpio3";
+		io-channels = <&pmi632_vadc ADC_GPIO2_PU2>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&sub_mainboard_default>;
+	};
+};

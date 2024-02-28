@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "../trinket-audio-overlay.dtsi"
+
+&wsa881x_0211 {
+	status = "disabled";
+};
+
+&wsa881x_0212 {
+	status = "disabled";
+};
+
+&wsa881x_0213 {
+	status = "disabled";
+};
+
+&wsa881x_0214 {
+	status = "disabled";
+};
+
+&wcd937x_codec {
+	qcom,ext-pa-gpio = <&tlmm 94 0x00>;
+	qcom,cdc-micbias1-mv = <2700>;
+	qcom,cdc-micbias2-mv = <2700>;
+};
+
+&sm6150_snd {
+	qcom,ext-disp-audio-rx = <0>;
+	qcom,audio-routing =
+		"AMIC1", "MIC BIAS1",
+		"MIC BIAS1", "Analog Mic1",
+		"AMIC2", "MIC BIAS2",
+		"MIC BIAS2", "Analog Mic2",
+		"TX_AIF1 CAP", "VA_MCLK",
+		"TX_AIF2 CAP", "VA_MCLK",
+		"RX AIF1 PB", "VA_MCLK",
+		"RX AIF2 PB", "VA_MCLK",
+		"RX AIF3 PB", "VA_MCLK",
+		"RX AIF4 PB", "VA_MCLK",
+		"HPHL_OUT", "VA_MCLK",
+		"HPHR_OUT", "VA_MCLK",
+		"AUX_OUT", "VA_MCLK",
+		"IN1_HPHL", "HPHL_OUT",
+		"IN2_HPHR", "HPHR_OUT",
+		"IN3_AUX", "AUX_OUT",
+		"TX SWR_ADC0", "ADC1_OUTPUT",
+		"TX SWR_ADC2", "ADC2_OUTPUT",
+		"WSA SRC0_INP", "SRC0",
+		"WSA_TX DEC0_INP", "TX DEC0 MUX",
+		"WSA_TX DEC1_INP", "TX DEC1 MUX",
+		"RX_TX DEC0_INP", "TX DEC0 MUX",
+		"RX_TX DEC1_INP", "TX DEC1 MUX",
+		"RX_TX DEC2_INP", "TX DEC2 MUX",
+		"RX_TX DEC3_INP", "TX DEC3 MUX",
+		"RX_TX DEC3_INP", "TX DEC3 MUX";
+	qcom,msm-mbhc-gnd-swh = <0>;
+
+	/delete-property/ qcom,cdc-dmic01-gpios;
+	/delete-property/ qcom,cdc-dmic23-gpios;
+
+	qcom,cdc-dmic01-gpios;
+	qcom,cdc-dmic23-gpios;
+	asoc-codec-names = "msm-stub-codec.1", "bolero_codec",
+				"msm-ext-disp-audio-codec-rx";
+	qcom,wsa-max-devs = <0>;
+	qcom,mbhc-audio-jack-type = "4-pole-jack";
+};

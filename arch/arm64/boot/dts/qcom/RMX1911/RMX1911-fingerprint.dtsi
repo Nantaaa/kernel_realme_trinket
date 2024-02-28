@@ -1,0 +1,40 @@
+/* Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&soc {
+	fpc_fpc1020{
+		compatible = "fpc,fpc1020";
+		fpc,irq-gpio = <&tlmm 92 0x00>;
+		vdd_io-supply = <&L9A>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpio_fpc_irq_default>;
+		gpio_fpc_irq_default: gpio_fpc_irq_default {
+			mux {
+				pins = "gpio92";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio92";
+				drive-strength = <2>;
+				bias-pull-up;
+				input-enable;
+			};
+		};
+	};
+
+	egis_fp520 {
+		compatible = "egistec,et520";
+		egistec,gpio_rst = <&tlmm 93 0x00>;
+		egistec,gpio_irq = <&tlmm 92 0x00>;
+		egistec,gpio_pwr_en = <&tlmm 48 0x00>;
+    };
+};
